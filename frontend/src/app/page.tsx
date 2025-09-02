@@ -37,6 +37,14 @@ export default function Home() {
     fetchPosts()
   }
 
+  const handleDelete = async (id: number) => {
+    await fetch(`http://localhost:3001/api/v1/posts/${id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json'},
+    })
+    setPosts(posts.filter(post => post.id !== id))
+  }
+
   return (
     <main className='max-w-3xl mx-auto p-6'>
       <h1 className='text-3xl font-bold text-center mb-6'>掲示板</h1>
@@ -68,8 +76,15 @@ export default function Home() {
       <div className="space-y-4">
         {posts.map(post => (
           <div key={post.id} style={{ border: '1px solid #ccc', padding: '1rem', marginTop: '1rem'}}>
-            <h3>{post.title}</h3>
-            <p>{post.content}</p>
+            <h3>タイトル: {post.title}</h3>
+            <p>内容: {post.content}</p>
+            <button
+              type="submit"
+              className="bg-red-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-red-600 transition-colors"
+              onClick={() => handleDelete(post.id)}
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>
